@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pyproject.toml and poetry.lock
+COPY pyproject.toml poetry.lock* ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-dev --no-interaction
+
+# Copy app code
+COPY src/backend /app/src/backend
+
+# Expose port
+EXPOSE 8000
+
+# Run app
+CMD ["uvicorn", "src.backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]

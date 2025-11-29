@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend-lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Poetry
+        run: pip install poetry
+      
+      - name: Install dependencies
+        run: poetry install
+      
+      - name: Lint with ruff
+        run: poetry run ruff check src/backend
+      
+      - name: Format check with black
+        run: poetry run black --check src/backend
+      
+      - name: Run tests
+        run: poetry run pytest src/backend/tests -v
+
+  frontend-lint-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: cd src/frontend && npm install
+      
+      - name: Lint
+        run: cd src/frontend && npm run lint || true
+      
+      - name: Build
+        run: cd src/frontend && npm run build
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build API image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./infra/docker/Dockerfile.api
+          push: false
+          tags: lineage-auditor-api:latest

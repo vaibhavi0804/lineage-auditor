@@ -1,3 +1,5 @@
+# /Users/vaibhavithakur/lineage-auditor/infra/docker/Dockerfile.api
+
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -14,13 +16,10 @@ COPY pyproject.toml poetry.lock* ./
 # Install Python dependencies
 RUN pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false && \
-    poetry install --no-dev --no-interaction
+    poetry install --no-interaction --without dev --no-root
 
 # Copy app code
-COPY src/backend /app/src/backend
-
-# Expose port
-EXPOSE 8000
+ENV PYTHONPATH=/app/src/backend
 
 # Run app
-CMD ["uvicorn", "src.backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

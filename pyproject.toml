@@ -6,6 +6,10 @@ authors = ["Vaibhavi Thakur"]
 license = "MIT"
 readme = "README.md"
 
+packages = [
+  { include = "app", from = "src/backend" }
+]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.104.1"

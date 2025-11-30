@@ -3,6 +3,7 @@ Application configuration.
 Loads from environment variables or defaults.
 """
 import os
+from typing import Optional
 from pydantic_settings import BaseSettings
 
 
@@ -33,7 +34,10 @@ class Settings(BaseSettings):
         "AIRFLOW_DAGS_FOLDER",
         "/opt/airflow/dags"
     )
-    
+
+    # Frontend dev URL (optional; present in .env from frontend tooling)
+    VITE_API_URL: Optional[str] = None
+
     class Config:
         env_file = ".env"
         case_sensitive = True

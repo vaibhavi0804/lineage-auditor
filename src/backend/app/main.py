@@ -7,7 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
 
-from app.config import settings
+from app.config import get_settings
+settings = get_settings()
+
 from app.routers import datasets, profiles, issues, lineage
 from app.database import init_db
 

@@ -1,10 +1,9 @@
+# src/backend/app/routers/datasets.py
 """
 Datasets API router.
 """
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
-from sqlalchemy.orm import Session
-from app.database import get_db
-from app.models.dataset import Dataset
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from app.supabase_client import table_select, table_insert
 from app.schemas.dataset import DatasetCreate, DatasetResponse
 import uuid
 import logging
@@ -14,21 +13,23 @@ from app.services.profiler import DatasetProfiler
 
 logger = logging.getLogger(__name__)
 
+# table name; change if your DB uses a different table name
+TABLE_DATASETS = "datasets"
+
 router = APIRouter()
 
 
 @router.get("/", response_model=list[DatasetResponse])
-async def list_datasets(db: Session = Depends(get_db)):
+async def list_datasets():
     """List all datasets."""
-    datasets = db.query(Dataset).all()
-    return datasets
+    rows = await table_select(TABLE_DATASETS, columns="id,name,row_count,column_count,storage_path,created_at")
+    return rows
 
 
 @router.post("/upload", response_model=DatasetResponse)
 async def upload_dataset(
     file: UploadFile = File(...),
-    name: str = None,
-    db: Session = Depends(get_db)
+    name: str | None = None,
 ):
     """Upload a CSV/Parquet dataset."""
     try:
@@ -48,16 +49,18 @@ async def upload_dataset(
 
         # Create dataset record (storage_path set later)
         dataset_id = str(uuid.uuid4())
-        dataset = Dataset(
-            id=dataset_id,
-            name=name,
-            row_count=len(df),
-            column_count=len(df.columns),
-            storage_path=None,
-        )
-        db.add(dataset)
-        db.commit()
-        db.refresh(dataset)
+        dataset_payload = {
+            "id": dataset_id,
+            "name": name,
+            "row_count": len(df),
+            "column_count": len(df.columns),
+            "storage_path": None,
+        }
+
+        # Insert dataset row via Supabase
+        inserted_dataset = await table_insert(TABLE_DATASETS, dataset_payload)
+        # Supabase returns list representation
+        created_dataset = inserted_dataset[0] if isinstance(inserted_dataset, list) and inserted_dataset else inserted_dataset
 
         # Try to upload to MinIO; fallback to local
         try:
@@ -71,11 +74,20 @@ async def upload_dataset(
                 storage_path = save_local_file(dataset_id, file.filename, contents)
                 logger.info("Saved local fallback: %s", storage_path)
 
-            # persist storage_path on dataset row
-            dataset.storage_path = storage_path
-            db.add(dataset)
-            db.commit()
-            db.refresh(dataset)
+            # persist storage_path on dataset row via update
+            # Supabase PATCH via table_update (not included here to keep small) — do a simple update call:
+            try:
+                # Update storage_path field
+                from app.supabase_client import table_update
+                updated = await table_update(
+                    TABLE_DATASETS,
+                    {"storage_path": storage_path},
+                    filters=f"id=eq.{dataset_id}"
+                )
+                if isinstance(updated, list) and updated:
+                    created_dataset = updated[0]
+            except Exception as e_up:
+                logger.warning("Failed to persist storage_path to dataset row: %s", e_up)
 
         except Exception as e_storage:
             # If even the fallback failed unexpectedly, log and continue profiling
@@ -83,20 +95,17 @@ async def upload_dataset(
             # We still proceed, dataset exists but storage_path is None
 
         # Profile it
-        from app.models.dataset import DatasetProfile
         profile_data = DatasetProfiler.profile(df)
-        profile = DatasetProfile(
-            id=str(uuid.uuid4()),
-            dataset_id=dataset_id,
-            columns_metadata=profile_data["columns_metadata"],
-            statistics=profile_data["statistics"],
-            sample_rows=profile_data["sample_rows"],
-        )
-        db.add(profile)
-        db.commit()
+        # Create profile row using helper from profiles router (or call directly)
+        from app.routers.profiles import create_profile
+        try:
+            created_profile = await create_profile(dataset_id, profile_data)
+        except Exception as e_prof:
+            logger.error("Profile creation failed: %s", e_prof)
 
-        logger.info(f"Dataset {dataset_id} uploaded and profiled (storage_path={dataset.storage_path})")
-        return dataset
+        logger.info(f"Dataset {dataset_id} uploaded and profiled (storage_path={created_dataset.get('storage_path')})")
+        # return dataset object in same shape as DatasetResponse expects
+        return created_dataset
 
     except HTTPException:
         raise
@@ -104,12 +113,13 @@ async def upload_dataset(
         logger.error(f"Upload error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{dataset_id}", response_model=DatasetResponse)
-async def get_dataset(dataset_id: str, db: Session = Depends(get_db)):
+async def get_dataset(dataset_id: str):
     """
     Return dataset metadata by id.
     """
-    ds = db.query(Dataset).filter(Dataset.id == dataset_id).one_or_none()
-    if ds is None:
+    row = await table_select(TABLE_DATASETS, columns="id,name,row_count,column_count,storage_path,created_at", filters=f"id=eq.{dataset_id}", params={"limit":"1"})
+    if not row:
         raise HTTPException(status_code=404, detail="Dataset not found")
-    return ds
+    return row[0]

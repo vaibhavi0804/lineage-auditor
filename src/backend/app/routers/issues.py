@@ -1,26 +1,27 @@
+# src/backend/app/routers/issues.py
 """
 Issues API router.
 """
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.database import get_db
-from app.models.dataset import Issue
+from fastapi import APIRouter, HTTPException
+from app.supabase_client import table_select
 from app.schemas.issue import IssueResponse
+
+# Adjust table name if different
+TABLE_ISSUES = "issues"
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[IssueResponse])
-async def list_issues(db: Session = Depends(get_db)):
+async def list_issues():
     """List all detected issues."""
-    issues = db.query(Issue).order_by(Issue.detected_at.desc()).all()
-    return issues
+    rows = await table_select(TABLE_ISSUES, columns="id,dataset_id,issue_type,details,detected_at", params={"order":"detected_at.desc"})
+    return rows
 
 
 @router.get("/dataset/{dataset_id}", response_model=list[IssueResponse])
-async def get_dataset_issues(dataset_id: str, db: Session = Depends(get_db)):
+async def get_dataset_issues(dataset_id: str):
     """Get issues for a specific dataset."""
-    issues = db.query(Issue).filter(
-        Issue.dataset_id == dataset_id
-    ).order_by(Issue.detected_at.desc()).all()
-    return issues
+    filters = f"dataset_id=eq.{dataset_id}"
+    rows = await table_select(TABLE_ISSUES, columns="id,dataset_id,issue_type,details,detected_at", filters=filters, params={"order":"detected_at.desc"})
+    return rows

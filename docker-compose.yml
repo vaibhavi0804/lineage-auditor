@@ -57,23 +57,7 @@ services:
         condition: service_healthy
     volumes:
       - ./src/backend:/app/src/backend
-      - ./logs:/app/logs
     command: uvicorn src.backend.app.main:app --host 0.0.0.0 --port 8000 --reload
-
-  # React Frontend (Development)
-  frontend:
-    build:
-      context: ./src/frontend
-      dockerfile: Dockerfile
-    container_name: lineage-auditor-frontend
-    ports:
-      - "5173:5173"
-    environment:
-      VITE_API_URL: http://localhost:8000
-    volumes:
-      - ./src/frontend/src:/app/src
-      - ./src/frontend/public:/app/public
-    command: npm run dev
 
 volumes:
   postgres-data:

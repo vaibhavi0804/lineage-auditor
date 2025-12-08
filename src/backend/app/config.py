@@ -4,7 +4,7 @@ Loads from environment variables or defaults.
 """
 import os
 from typing import Optional
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # API
     API_TITLE: str = "Lineage Auditor API"
     API_VERSION: str = "0.1.0"
-    DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
+    DEBUG: bool = False
     
     # Database
     DATABASE_URL: str = os.getenv(
@@ -22,25 +22,23 @@ class Settings(BaseSettings):
     )
     
     # MinIO
-    MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
-    MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
-    MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
-    MINIO_BUCKET: str = os.getenv("MINIO_BUCKET", "datasets")
-    MINIO_USE_SSL: bool = os.getenv("MINIO_USE_SSL", "False").lower() == "true"
+    MINIO_ENDPOINT: str = "localhost:9000"
+    MINIO_ACCESS_KEY: str = "minioadmin"
+    MINIO_SECRET_KEY: str = "minioadmin"
+    MINIO_BUCKET: str = "datasets"
+    MINIO_USE_SSL: bool = False
     
     # Airflow (for lineage extraction)
-    AIRFLOW_HOME: str = os.getenv("AIRFLOW_HOME", "/opt/airflow")
-    AIRFLOW_DAGS_FOLDER: str = os.getenv(
-        "AIRFLOW_DAGS_FOLDER",
-        "/opt/airflow/dags"
-    )
 
-    # Frontend dev URL (optional; present in .env from frontend tooling)
+    AIRFLOW_HOME: str = "/opt/airflow"
+    AIRFLOW_DAGS_FOLDER: str = "/opt/airflow/dags"
+
     VITE_API_URL: Optional[str] = None
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+    )
 
 
 # lazy settings factory (avoids import-time failures)

@@ -16,10 +16,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     
     # Database
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql://user:password@localhost:5432/lineage_auditor"
-    )
+    DATABASE_URL: str
     
     # MinIO
     MINIO_ENDPOINT: str = "localhost:9000"

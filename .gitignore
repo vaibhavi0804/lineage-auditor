@@ -65,3 +65,5 @@ airflow-dags/.airflowignore
 .pytest_cache/
 .coverage
 htmlcov/
+
+.scripts/

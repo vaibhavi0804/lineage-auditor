@@ -29,7 +29,7 @@ Statistical test suite (Kolmogorov-Smirnov, Population Stability Index, Chi-squa
 ML-powered column type detection using embedding-based classification to identify semantic changes missed by schema analysis alone.
 
 ### Lineage Tracking
-Map complete dataset dependencies and transformation lineage (Dataset A â†’ Job X â†’ Dataset B) for end-to-end traceability.
+Map complete dataset dependencies and transformation lineage (Dataset A -> Job X -> Dataset B) for end-to-end traceability.
 
 ### Root-Cause Engine
 Automatically identify upstream culprits responsible for downstream anomalies, reducing fault triage time by 60%.
@@ -45,28 +45,29 @@ End-to-end detection pipeline optimized for sub-500ms latency on large-scale dat
 ## System Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                    React Frontend (Vercel)                      â”‚
-â”‚              Interactive Dashboard & Visualization              â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                         â”‚ HTTP/REST API
-                         â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                 FastAPI Backend (Render)                        â”‚
-â”‚         Profiling â€¢ Detection â€¢ Lineage Analysis                â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-             â”‚                                â”‚
-             â–¼                                â–¼
-   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-   â”‚  PostgreSQL      â”‚          â”‚   Neo4j/PostgreSQL      â”‚
-   â”‚  (Metadata)      â”‚          â”‚   (Lineage Graph)       â”‚
-   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-             â”‚
-             â–¼
-   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-   â”‚     MinIO        â”‚
-   â”‚   (Data Lake)    â”‚
-   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
++-------+-------+-------+-------+-------+-------+-------+-------+---+
+|             React Frontend (Vercel)                               |
+|         Interactive Dashboard & Visualization                    |
++-------+-------+-------+-------+-------+-------+-------+-------+---+
+                                |
+                        HTTP/REST API
+                                |
++-------+-------+-------+-------+-------+-------+-------+-------+---+
+|             FastAPI Backend (Render)                              |
+|     Profiling - Detection - Lineage Analysis                     |
++-------+-------+-------+-------+-------+-------+-------+-------+---+
+        |                                               |
+        v                                               v
++-----+-----+              +-----------+-----+-----+
+| PostgreSQL|              | Neo4j/PostgreSQL |
+| (Metadata)|              | (Lineage Graph) |
++-----+-----+              +-----------+-----+
+        |
+        v
++-----+-----+
+|   MinIO   |
+| (Data)    |
++-----+-----+
 ```
 
 ---
@@ -176,7 +177,7 @@ npm run dev
 | **Lineage Query Latency** | < 300ms (5,000 datasets) | < 500ms |
 | **Full Pipeline Latency** | < 500ms per dataset | < 1000ms |
 
-**[View Detailed Benchmark Results â†’](BENCHMARK.md)**
+**[View Detailed Benchmark Results](BENCHMARK.md)**
 
 ---
 
@@ -184,76 +185,81 @@ npm run dev
 
 ```
 lineage-auditor/
-â”‚
-â”œâ”€â”€ src/
-â”‚   â”œâ”€â”€ backend/                          # FastAPI Application
-â”‚   â”‚   â”œâ”€â”€ app/
-â”‚   â”‚   â”‚   â”œâ”€â”€ main.py                   # Application Entry Point
-â”‚   â”‚   â”‚   â”œâ”€â”€ config.py                 # Configuration Management
-â”‚   â”‚   â”‚   â”œâ”€â”€ database.py               # Database Connection & Setup
-â”‚   â”‚   â”‚   â”‚
-â”‚   â”‚   â”‚   â”œâ”€â”€ models/                   # SQLAlchemy ORM Models
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ dataset.py
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ profile.py
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ issue.py
-â”‚   â”‚   â”‚   â”‚   â””â”€â”€ lineage.py
-â”‚   â”‚   â”‚   â”‚
-â”‚   â”‚   â”‚   â”œâ”€â”€ schemas/                  # Pydantic Request/Response Schemas
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ dataset.py
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ profile.py
-â”‚   â”‚   â”‚   â”‚   â””â”€â”€ issue.py
-â”‚   â”‚   â”‚   â”‚
-â”‚   â”‚   â”‚   â”œâ”€â”€ services/                 # Core Business Logic
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ profiler.py           # Dataset Profiling Engine
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ detectors.py          # Drift Detection Algorithms
-â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ lineage.py            # Lineage Graph Construction
-â”‚   â”‚   â”‚   â”‚   â””â”€â”€ root_cause.py         # Root-Cause Analysis Engine
-â”‚   â”‚   â”‚   â”‚
-â”‚   â”‚   â”‚   â””â”€â”€ routers/                  # API Route Handlers
-â”‚   â”‚   â”‚       â”œâ”€â”€ datasets.py
-â”‚   â”‚   â”‚       â”œâ”€â”€ profiles.py
-â”‚   â”‚   â”‚       â”œâ”€â”€ issues.py
-â”‚   â”‚   â”‚       â””â”€â”€ lineage.py
-â”‚   â”‚   â”‚
-â”‚   â”‚   â””â”€â”€ tests/                        # Unit & Integration Tests
-â”‚   â”‚       â”œâ”€â”€ test_profiler.py
-â”‚   â”‚       â”œâ”€â”€ test_detectors.py
-â”‚   â”‚       â””â”€â”€ test_lineage.py
-â”‚   â”‚
-â”‚   â””â”€â”€ frontend/                         # React Application (Vite)
-â”‚       â”œâ”€â”€ src/
-â”‚       â”‚   â”œâ”€â”€ components/               # Reusable UI Components
-â”‚       â”‚   â”œâ”€â”€ pages/                    # Page Components
-â”‚       â”‚   â”œâ”€â”€ utils/
-â”‚       â”‚   â”‚   â””â”€â”€ api.js                # API Client & Request Handlers
-â”‚       â”‚   â”œâ”€â”€ App.jsx                   # Root Component
-â”‚       â”‚   â””â”€â”€ main.jsx                  # React DOM Mount
-â”‚       â”‚
-â”‚       â”œâ”€â”€ Dockerfile                    # Container Configuration
-â”‚       â”œâ”€â”€ vite.config.js                # Vite Build Configuration
-â”‚       â””â”€â”€ package.json                  # Node Dependencies
-â”‚
-â”œâ”€â”€ infra/
-â”‚   â”œâ”€â”€ docker/                           # Docker Image Definitions
-â”‚   â”‚   â”œâ”€â”€ Dockerfile.backend
-â”‚   â”‚   â””â”€â”€ Dockerfile.frontend
-â”‚   â”‚
-â”‚   â””â”€â”€ docker-compose.yml                # Multi-Container Orchestration
-â”‚
-â”œâ”€â”€ scripts/
-â”‚   â”œâ”€â”€ inject_faults.py                  # Synthetic Fault Injection
-â”‚   â””â”€â”€ run_benchmark.py                  # Benchmark Execution Script
-â”‚
-â”œâ”€â”€ .github/
-â”‚   â””â”€â”€ workflows/
-â”‚       â””â”€â”€ ci.yml                        # GitHub Actions CI/CD Pipeline
-â”‚
-â”œâ”€â”€ pyproject.toml                        # Python Dependencies & Metadata
-â”œâ”€â”€ poetry.lock                           # Locked Dependency Versions
-â”œâ”€â”€ BENCHMARK.md                          # Detailed Benchmark Results
-â”œâ”€â”€ CONTRIBUTING.md                       # Contribution Guidelines
-â”œâ”€â”€ LICENSE                               # MIT License
-â””â”€â”€ README.md                             # This File
+|
++-- src/
+|   |
+|   +-- backend/                         FastAPI Application
+|   |   |
+|   |   +-- app/
+|   |   |   |
+|   |   |   +-- main.py                  Application Entry Point
+|   |   |   +-- config.py                Configuration Management
+|   |   |   +-- database.py              Database Connection & Setup
+|   |   |   |
+|   |   |   +-- models/                  SQLAlchemy ORM Models
+|   |   |   |   +-- dataset.py
+|   |   |   |   +-- profile.py
+|   |   |   |   +-- issue.py
+|   |   |   |   +-- lineage.py
+|   |   |   |
+|   |   |   +-- schemas/                 Pydantic Request/Response Schemas
+|   |   |   |   +-- dataset.py
+|   |   |   |   +-- profile.py
+|   |   |   |   +-- issue.py
+|   |   |   |
+|   |   |   +-- services/                Core Business Logic
+|   |   |   |   +-- profiler.py          Dataset Profiling Engine
+|   |   |   |   +-- detectors.py         Drift Detection Algorithms
+|   |   |   |   +-- lineage.py           Lineage Graph Construction
+|   |   |   |   +-- root_cause.py        Root-Cause Analysis Engine
+|   |   |   |
+|   |   |   +-- routers/                 API Route Handlers
+|   |   |       +-- datasets.py
+|   |   |       +-- profiles.py
+|   |   |       +-- issues.py
+|   |   |       +-- lineage.py
+|   |   |
+|   |   +-- tests/                       Unit & Integration Tests
+|   |       +-- test_profiler.py
+|   |       +-- test_detectors.py
+|   |       +-- test_lineage.py
+|   |
+|   +-- frontend/                        React Application (Vite)
+|       |
+|       +-- src/
+|       |   +-- components/              Reusable UI Components
+|       |   +-- pages/                   Page Components
+|       |   +-- utils/
+|       |   |   +-- api.js               API Client & Request Handlers
+|       |   +-- App.jsx                  Root Component
+|       |   +-- main.jsx                 React DOM Mount
+|       |
+|       +-- Dockerfile                   Container Configuration
+|       +-- vite.config.js               Vite Build Configuration
+|       +-- package.json                 Node Dependencies
+|
++-- infra/
+|   |
+|   +-- docker/                          Docker Image Definitions
+|   |   +-- Dockerfile.backend
+|   |   +-- Dockerfile.frontend
+|   |
+|   +-- docker-compose.yml               Multi-Container Orchestration
+|
++-- scripts/
+|   +-- inject_faults.py                 Synthetic Fault Injection
+|   +-- run_benchmark.py                 Benchmark Execution Script
+|
++-- .github/
+|   +-- workflows/
+|       +-- ci.yml                       GitHub Actions CI/CD Pipeline
+|
++-- pyproject.toml                       Python Dependencies & Metadata
++-- poetry.lock                          Locked Dependency Versions
++-- BENCHMARK.md                         Detailed Benchmark Results
++-- CONTRIBUTING.md                      Contribution Guidelines
++-- LICENSE                              MIT License
++-- README.md                            This File
 ```
 
 ---
@@ -291,47 +297,47 @@ poetry run black src/backend
 ### Datasets Endpoint
 
 ```http
-GET    /api/datasets              # List all datasets with metadata
-POST   /api/datasets/upload       # Upload new dataset for profiling
-GET    /api/datasets/{id}         # Retrieve dataset details & history
+GET    /api/datasets              List all datasets with metadata
+POST   /api/datasets/upload       Upload new dataset for profiling
+GET    /api/datasets/{id}         Retrieve dataset details & history
 ```
 
 ### Profiles Endpoint
 
 ```http
-GET    /api/profiles/{dataset_id}         # Retrieve all profiles for dataset
-GET    /api/profiles/{dataset_id}/latest  # Get most recent profile
+GET    /api/profiles/{dataset_id}         Retrieve all profiles for dataset
+GET    /api/profiles/{dataset_id}/latest  Get most recent profile
 ```
 
 ### Issues Endpoint
 
 ```http
-GET    /api/issues                         # List all detected issues
-GET    /api/issues/dataset/{dataset_id}   # Filter issues by dataset
+GET    /api/issues                         List all detected issues
+GET    /api/issues/dataset/{dataset_id}   Filter issues by dataset
 ```
 
 ### Lineage Endpoint
 
 ```http
-GET    /api/lineage/{dataset_id}          # Retrieve lineage graph for dataset
-GET    /api/lineage/dependencies/{job_id} # Get job dependencies & impacted datasets
+GET    /api/lineage/{dataset_id}          Retrieve lineage graph for dataset
+GET    /api/lineage/dependencies/{job_id} Get job dependencies & impacted datasets
 ```
 
 ### Health Check
 
 ```http
-GET    /api/health                        # Service health status
+GET    /api/health                        Service health status
 ```
 
 ---
 
 ## Security & Compliance
 
-- CHECKED **No secrets in codebase** - All credentials loaded from `.env` files
-- CHECKED **CORS configuration** - Whitelist approved frontend origins
-- CHECKED **Input validation** - Pydantic schemas validate all API requests
-- CHECKED **HTTPS enforcement** - TLS certificates required in production
-- CHECKED **Environment isolation** - Separate configs for development/staging/production
+- YES **No secrets in codebase** - All credentials loaded from `.env` files
+- YES **CORS configuration** - Whitelist approved frontend origins
+- YES **Input validation** - Pydantic schemas validate all API requests
+- YES **HTTPS enforcement** - TLS certificates required in production
+- YES **Environment isolation** - Separate configs for development/staging/production
 - PLANNED **Rate limiting** - (Planned for v2.0)
 - PLANNED **OAuth2 authentication** - (Planned for v2.0)
 - PLANNED **API key management** - (Planned for v2.0)
@@ -365,13 +371,13 @@ GET    /api/health                        # Service health status
 ## Roadmap & Future Enhancements
 
 ### Current Version
-- DONE Dataset profiling & statistics extraction
-- DONE Schema drift detection
-- DONE Statistical drift detection (KS, PSI, Chi-squared)
-- DONE Semantic classification using embeddings
-- DONE Lineage tracking & visualization
-- DONE Root-cause analysis engine
-- DONE Web-based dashboard
+- COMPLETE Dataset profiling & statistics extraction
+- COMPLETE Schema drift detection
+- COMPLETE Statistical drift detection (KS, PSI, Chi-squared)
+- COMPLETE Semantic classification using embeddings
+- COMPLETE Lineage tracking & visualization
+- COMPLETE Root-cause analysis engine
+- COMPLETE Web-based dashboard
 
 ### Planned Features
 - [ ] **OAuth2 Authentication** - Enterprise SSO integration

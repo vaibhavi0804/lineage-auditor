@@ -1,11 +1,11 @@
 # Lineage Auditor
 
-> **ML-powered data quality & lineage auditor for enterprise data teams**  
+> **ML-powered data quality & lineage auditor for enterprise data teams**
 > Automatically detects schema drift, semantic drift, and data quality issues across your data pipeline. Traces root causes through dataset lineage and recommends remediation steps.
 
 ---
 
-## ðŸŽ¯ Live Demo
+## Live Demo
 
 | Environment | URL |
 |-------------|-----|
@@ -14,35 +14,35 @@
 
 ---
 
-## âœ¨ Core Features
+## Core Features
 
-### ðŸ“Š **Dataset Profiling**
+### Dataset Profiling
 Extract comprehensive statistics including null percentages, cardinality metrics, and distribution analysis for baseline dataset understanding.
 
-### ðŸ” **Schema Detection**
+### Schema Detection
 Catch critical schema changes including column additions, removals, and type transformations in real-time.
 
-### ðŸ“ˆ **Drift Detection**
+### Drift Detection
 Statistical test suite (Kolmogorov-Smirnov, Population Stability Index, Chi-squared) for distribution shifts across numerical and categorical features.
 
-### ðŸ·ï¸ **Semantic Classification**
+### Semantic Classification
 ML-powered column type detection using embedding-based classification to identify semantic changes missed by schema analysis alone.
 
-### ðŸ”— **Lineage Tracking**
+### Lineage Tracking
 Map complete dataset dependencies and transformation lineage (Dataset A â†’ Job X â†’ Dataset B) for end-to-end traceability.
 
-### ðŸŽ¯ **Root-Cause Engine**
+### Root-Cause Engine
 Automatically identify upstream culprits responsible for downstream anomalies, reducing fault triage time by 60%.
 
-### ðŸ“‹ **Issue Dashboard**
+### Issue Dashboard
 Centralized, interactive dashboard for visualizing all detected problems with severity levels and remediation recommendations.
 
-### âš¡ **High-Performance Detection**
+### High-Performance Detection
 End-to-end detection pipeline optimized for sub-500ms latency on large-scale datasets.
 
 ---
 
-## ðŸ—ï¸ System Architecture
+## System Architecture
 
 ```
 â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
@@ -71,7 +71,7 @@ End-to-end detection pipeline optimized for sub-500ms latency on large-scale dat
 
 ---
 
-## ðŸš€ Quick Start Guide
+## Quick Start Guide
 
 ### Prerequisites
 
@@ -134,7 +134,7 @@ npm run dev
 
 ---
 
-## ðŸŒ Production Deployment
+## Production Deployment
 
 ### Backend Deployment (Render)
 
@@ -163,24 +163,24 @@ npm run dev
 
 ---
 
-## ðŸ“Š Performance Benchmarks
+## Performance Benchmarks
 
 | Metric | Performance | Target |
 |--------|-------------|--------|
-| **Schema Detection Precision** | 95% | â‰¥ 90% |
-| **Schema Detection Recall** | 90% | â‰¥ 85% |
-| **Semantic Classification F1 Score** | 0.92 | â‰¥ 0.90 |
-| **Root-Cause Rank-1 Accuracy** | 82% | â‰¥ 80% |
+| **Schema Detection Precision** | 95% | >= 90% |
+| **Schema Detection Recall** | 90% | >= 85% |
+| **Semantic Classification F1 Score** | 0.92 | >= 0.90 |
+| **Root-Cause Rank-1 Accuracy** | 82% | >= 80% |
 | **Profiling Speed** | 200ms per 10K rows | < 250ms |
 | **Schema Detection** | 50ms per comparison | < 100ms |
 | **Lineage Query Latency** | < 300ms (5,000 datasets) | < 500ms |
 | **Full Pipeline Latency** | < 500ms per dataset | < 1000ms |
 
-ðŸ‘‰ **[View Detailed Benchmark Results â†’](BENCHMARK.md)**
+**[View Detailed Benchmark Results â†’](BENCHMARK.md)**
 
 ---
 
-## ðŸ“ Project Structure
+## Project Structure
 
 ```
 lineage-auditor/
@@ -258,7 +258,7 @@ lineage-auditor/
 
 ---
 
-## ðŸ§ª Testing & Quality Assurance
+## Testing & Quality Assurance
 
 ### Run Unit Tests
 ```bash
@@ -286,7 +286,7 @@ poetry run black src/backend
 
 ---
 
-## ðŸ“š API Reference
+## API Reference
 
 ### Datasets Endpoint
 
@@ -325,20 +325,20 @@ GET    /api/health                        # Service health status
 
 ---
 
-## ðŸ” Security & Compliance
+## Security & Compliance
 
-- âœ… **No secrets in codebase** â€“ All credentials loaded from `.env` files
-- âœ… **CORS configuration** â€“ Whitelist approved frontend origins
-- âœ… **Input validation** â€“ Pydantic schemas validate all API requests
-- âœ… **HTTPS enforcement** â€“ TLS certificates required in production
-- âœ… **Environment isolation** â€“ Separate configs for development/staging/production
-- â³ **Rate limiting** â€“ (Planned for v2.0)
-- â³ **OAuth2 authentication** â€“ (Planned for v2.0)
-- â³ **API key management** â€“ (Planned for v2.0)
+- CHECKED **No secrets in codebase** - All credentials loaded from `.env` files
+- CHECKED **CORS configuration** - Whitelist approved frontend origins
+- CHECKED **Input validation** - Pydantic schemas validate all API requests
+- CHECKED **HTTPS enforcement** - TLS certificates required in production
+- CHECKED **Environment isolation** - Separate configs for development/staging/production
+- PLANNED **Rate limiting** - (Planned for v2.0)
+- PLANNED **OAuth2 authentication** - (Planned for v2.0)
+- PLANNED **API key management** - (Planned for v2.0)
 
 ---
 
-## âš¡ Performance Optimization Details
+## Performance Optimization Details
 
 ### Profiling Performance
 - **Speed**: 200ms per 10,000-row dataset
@@ -362,34 +362,34 @@ GET    /api/health                        # Service health status
 
 ---
 
-## ðŸ›£ï¸ Roadmap & Future Enhancements
+## Roadmap & Future Enhancements
 
 ### Current Version
-- âœ… Dataset profiling & statistics extraction
-- âœ… Schema drift detection
-- âœ… Statistical drift detection (KS, PSI, Chi-squared)
-- âœ… Semantic classification using embeddings
-- âœ… Lineage tracking & visualization
-- âœ… Root-cause analysis engine
-- âœ… Web-based dashboard
+- DONE Dataset profiling & statistics extraction
+- DONE Schema drift detection
+- DONE Statistical drift detection (KS, PSI, Chi-squared)
+- DONE Semantic classification using embeddings
+- DONE Lineage tracking & visualization
+- DONE Root-cause analysis engine
+- DONE Web-based dashboard
 
 ### Planned Features
-- [ ] **OAuth2 Authentication** â€“ Enterprise SSO integration
-- [ ] **Streaming Ingestion** â€“ Apache Kafka & Kinesis support
-- [ ] **Advanced ML Models** â€“ Deep learning for embedding-based drift detection
-- [ ] **Airflow DAG Integration** â€“ Direct Apache Airflow metadata ingestion
-- [ ] **Multi-Tenant Support** â€“ Organization-level isolation & access control
-- [ ] **GraphQL API** â€“ Alternative API layer with advanced query capabilities
-- [ ] **Real-Time Alerting** â€“ Webhook & email notifications on drift detection
-- [ ] **Custom Detectors** â€“ User-defined drift detection algorithms
-- [ ] **Data Governance** â€“ PII detection & data classification
-- [ ] **Cost Optimization** â€“ Compute cost tracking & optimization recommendations
+- [ ] **OAuth2 Authentication** - Enterprise SSO integration
+- [ ] **Streaming Ingestion** - Apache Kafka & Kinesis support
+- [ ] **Advanced ML Models** - Deep learning for embedding-based drift detection
+- [ ] **Airflow DAG Integration** - Direct Apache Airflow metadata ingestion
+- [ ] **Multi-Tenant Support** - Organization-level isolation & access control
+- [ ] **GraphQL API** - Alternative API layer with advanced query capabilities
+- [ ] **Real-Time Alerting** - Webhook & email notifications on drift detection
+- [ ] **Custom Detectors** - User-defined drift detection algorithms
+- [ ] **Data Governance** - PII detection & data classification
+- [ ] **Cost Optimization** - Compute cost tracking & optimization recommendations
 
 ---
 
-## ðŸ¤ Contributing
+## Contributing
 
-Contributions are welcome! We follow a standard GitHub fork â†’ branch â†’ pull request workflow.
+Contributions are welcome! We follow a standard GitHub fork -> branch -> pull request workflow.
 
 See **[CONTRIBUTING.md](CONTRIBUTING.md)** for:
 - Code style guidelines
@@ -399,15 +399,15 @@ See **[CONTRIBUTING.md](CONTRIBUTING.md)** for:
 
 ---
 
-## ðŸ“ License
+## License
 
-MIT License â€“ See **[LICENSE](LICENSE)** for full details.
+MIT License - See **[LICENSE](LICENSE)** for full details.
 
 This project is free to use, modify, and distribute in both personal and commercial projects.
 
 ---
 
-## ðŸ‘¤ Author & Contact
+## Author & Contact
 
 **Built by**: Vaibhavi Upadhyay
 
@@ -422,7 +422,7 @@ This project is free to use, modify, and distribute in both personal and commerc
 
 ---
 
-## ðŸ“‹ Technology Stack
+## Technology Stack
 
 | Category | Technologies |
 |----------|--------------|
@@ -437,44 +437,44 @@ This project is free to use, modify, and distribute in both personal and commerc
 
 ---
 
-## ðŸŽ“ Key Innovations
+## Key Innovations
 
-### 1. **Lineage-Aware Root-Cause Analysis**
+### 1. Lineage-Aware Root-Cause Analysis
 Traces downstream anomalies to their upstream source, reducing fault triage time by 60%.
 
-### 2. **Embedding-Based Semantic Detection**
+### 2. Embedding-Based Semantic Detection
 Uses transformer-based embeddings to detect semantic column changes that schema analysis alone would miss.
 
-### 3. **Multi-Method Drift Detection**
+### 3. Multi-Method Drift Detection
 Combines statistical tests (KS, PSI, Chi-squared) with ML-based approaches for robust drift detection across diverse data types.
 
-### 4. **Sub-500ms Detection Pipeline**
+### 4. Sub-500ms Detection Pipeline
 Highly optimized profiling and detection engine designed for real-time use in production data platforms.
 
 ---
 
-## â“ FAQ
+## FAQ
 
-**Q: What datasets does Lineage Auditor support?**  
+**Q: What datasets does Lineage Auditor support?**
 A: Structured tabular datasets in CSV, Parquet, JSON, and Avro formats. Support for streaming datasets is planned.
 
-**Q: How does root-cause analysis work?**  
+**Q: How does root-cause analysis work?**
 A: The system analyzes the lineage graph to identify upstream datasets and transformations that could have caused downstream anomalies. It ranks potential culprits by correlation strength.
 
-**Q: Can I run this on-premise?**  
+**Q: Can I run this on-premise?**
 A: Yes! Follow the "Local Development Setup" instructions. All services can be self-hosted using Docker.
 
-**Q: Is there a free tier?**  
+**Q: Is there a free tier?**
 A: This is an open-source project available under the MIT license. Deploy and use it freely!
 
-**Q: How do I integrate with Apache Airflow?**  
+**Q: How do I integrate with Apache Airflow?**
 A: Airflow integration is planned. Currently, you can call the REST API from Airflow tasks.
 
 ---
 
-## ðŸš€ Getting Started Next Steps
+## Getting Started Next Steps
 
-1. **Try the Demo**: Visit [https://lineage-auditor.vercel.app](https://lineage-auditor.vercel.app)
+1. **Try the Demo**: Visit https://lineage-auditor.vercel.app
 2. **Read the Docs**: Check out [DESIGN_DOC.md](DESIGN_DOC.md) for architectural details
 3. **Run Locally**: Follow "Quick Start Guide" above
 4. **Explore the Code**: Start with `src/backend/app/main.py` and `src/frontend/src/App.jsx`
@@ -484,4 +484,4 @@ A: Airflow integration is planned. Currently, you can call the REST API from Air
 
 **Questions?** Open a GitHub issue or check the [design documentation](DESIGN_DOC.md)!
 
-*Built with â¤ï¸ for data teams that care about quality.*
+*Built with love for data teams that care about quality.*
